@@ -19,32 +19,34 @@ class MagicWand extends Component
 
     public function mount()
     {
-        $this->resizedPhoto = null;
+        $this->resizedPhoto = 'storage/sample.jpeg';
     }
 
     public function save()
     {
-        $path = $this->photo->store('photos');
-        $filepath = storage_path('app/' . $path);
-        $this->resizedPhoto = \Str::uuid() . '.jpg';
-        ImageManagerStatic::make($filepath)
+        $filename = \Str::uuid() . '.jpg';
+
+        ImageManagerStatic::make(storage_path('app/' . $this->photo->store('public')))
             ->resize(1000, null, function ($constraint) {
                 $constraint->aspectRatio();
             })
-            ->save(storage_path('app/public/' . $this->resizedPhoto), 80, 'jpeg');
+            ->save(storage_path('app/public/' . $filename), 80, 'jpeg');
+
+        $this->resizedPhoto = 'storage/' . $filename;
     }
 
     public function magicwand($x, $y)
     {
         $this->x = round($x * 2);
         $this->y = round($y * 2);
-        $this->resultPhoto = \Str::uuid() . '.jpg';
-        $resultPath = storage_path('app/public/' . $this->resultPhoto);
+        $resultPhoto = \Str::uuid() . '.jpg';
         $binary = base_path('magicwand');
-        $input = storage_path('app/public/' . $this->resizedPhoto);
-        $command = "{$binary} {$this->x},{$this->y} -t {$this->tolerance} -f image -r outside -m layer -c black -o 50 {$input} {$resultPath}";
-
+        $output = storage_path('app/public/' . $resultPhoto);
+        $input = storage_path('app/public/' . basename($this->resizedPhoto));
+        $command = "{$binary} {$this->x},{$this->y} -t {$this->tolerance} -f image -r outside -m layer -c black -o 50 {$input} {$output}";
         exec($command);
+
+        $this->resultPhoto = 'storage/' . $resultPhoto;
     }
 
     public function render()
