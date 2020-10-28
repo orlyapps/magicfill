@@ -39,7 +39,7 @@
                             @if ($resizedPhoto)
                             <div x-ref="container"><img style="width:500px"
                                     x-on:click="$wire.magicwand($event.pageX - $refs.container.offsetLeft, $event.pageY - $refs.container.offsetTop)"
-                                    src="{{ asset($resizedPhoto) }}">
+                                    src="{{ asset('storage/'. $resizedPhoto) }}">
                             </div>
                             @endif
 
@@ -62,8 +62,8 @@
                         </h1>
 
                         @if($resultPhoto)
-                        <a href="{{ asset($resultPhoto) }}"><img style="width:500px"
-                                src="{{ asset($resultPhoto) }}"></a>
+                        <a href="{{ asset('storage/'. $resultPhoto) }}"><img style="width:500px"
+                                src="{{ asset('storage/'.$resultPhoto) }}"></a>
                         @endif
                     </div>
 
