@@ -24,10 +24,6 @@ class MagicWand extends Component
 
     public function save()
     {
-        $this->validate([
-            'photo' => 'image|max:5024', // 1MB Max
-        ]);
-
         $path = $this->photo->store('photos');
         $filepath = storage_path('app/' . $path);
         $this->resizedPhoto = \Str::uuid() . '.jpg';
